@@ -39,6 +39,11 @@ gol2 = pygame.transform.scale(gol2, (80, 180))
 bola = pygame.image.load('assets/img/pickupBall.png').convert_alpha()
 bola = pygame.transform.scale(bola, (20, 20))
 
+# Tela de informação
+
+informacao = pygame.image.load('assets/img/info.png').convert()
+informacao = pygame.transform.scale(informacao, (700, 400))
+
 # Clock (determina FPS)
 clock = pygame.time.Clock()
 
@@ -205,7 +210,6 @@ while game:
             if event.key == pygame.K_SPACE: 
                 screen = 2
 
-
             # Personagem 01 Movimento
             # Mexe o personagem 01 para esquerda e direita, adicionando uma velocidade 
             if event.key == pygame.K_LEFT:
@@ -226,7 +230,6 @@ while game:
 
                     if player1.rect.x + 20 < WIDTH and player1.speedx == +5:
                         player1.rect.x += 50  
-
 
             # Personagem 02 Movimento
             # Mexe o personagem 02 para esquerda e direita, adicionando uma velocidade 
