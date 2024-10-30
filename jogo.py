@@ -37,10 +37,9 @@ gol2 = pygame.transform.scale(gol2, (80, 180))
 
 # Bola: imagem + scale
 bola = pygame.image.load('assets/img/pickupBall.png').convert_alpha()
-bola = pygame.transform.scale(bola, (20, 20))
+bola = pygame.transform.scale(bola, (30, 30))
 
 # Tela de informação
-
 informacao = pygame.image.load('assets/img/info.png').convert()
 informacao = pygame.transform.scale(informacao, (700, 400))
 
@@ -138,7 +137,6 @@ class Player2 (pygame.sprite.Sprite):
             self.jumping = False
 
 # ----- Função do movimento da Bola
-
 class Bola (pygame.sprite.Sprite):
     def __init__(self, img):
 
@@ -149,7 +147,7 @@ class Bola (pygame.sprite.Sprite):
         self.rect.centerx = WIDTH / 2 
         self.rect.bottom = HEIGHT / 2
         self.rect.y = HEIGHT / 2
-        self.r = 20
+        self.r = 30
 
         self.speedx = 0
         self.speedy = 0
@@ -177,12 +175,12 @@ class Bola (pygame.sprite.Sprite):
 
 # ----- Criar o jogador 01 e jogador 02 + add ele em um grupo como do tutorial
 player1 = Player1(personagem1)
-player2 = Player2 (personagem2)
-bola = Bola (bola)
+player2 = Player2(personagem2)
+bola = Bola(bola)
 todos_sprites = pygame.sprite.Group()
 todos_sprites.add(player1)
-todos_sprites.add (player2)
-todos_sprites.add (bola)
+todos_sprites.add(player2)
+todos_sprites.add(bola)
 
 # ----- Inicia estruturas de dados
 game = True
@@ -269,11 +267,10 @@ while game:
                 player2.speedx -= 5
         
         # Bola se mexe quando clica em algum botão
-        if event.type == pygame.KEYDOWN:
-            bola.speedy = -10           
+        # if event.type == pygame.KEYDOWN:
+        #     bola.speedy = -10           
 
     # Jogadores colidem um com o outro e não passam por cima do outro
-
     if player1.rect.colliderect(player2.rect):
         player1.rect.x = player1.rect.x + 8
         player2.rect.x = player2.rect.x - 8
