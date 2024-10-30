@@ -34,6 +34,10 @@ gol1 = pygame.transform.scale(gol1, (80, 180))
 gol2 = pygame.image.load('assets/img/goalNormal2.png').convert_alpha()
 gol2 = pygame.transform.scale(gol2, (80, 180))
 
+# Bola
+bola = pygame.image.load('assets/img/pickupBall.png').convert_alpha()
+bola = pygame.transform.scale(bola, (22,22))
+
 # Clock (determina FPS)
 clock = pygame.time.Clock()
 
@@ -223,7 +227,7 @@ while game:
 
 
     # Código inspirado no https://stackoverflow.com/questions/42472019/flickering-text-in-pygame
-    #Texto piscante
+    # Texto piscante
     if piscar_texto >= 60: 
         mostrar = not mostrar  
         piscar_texto = 0
@@ -252,6 +256,10 @@ while game:
         # Informações sobre gols
         window.blit (gol1 , (0, HEIGHT - 180))
         window.blit (gol2 , (WIDTH - 80, HEIGHT - 180))
+
+        # Informações sobre bola
+        window.blit (bola , (WIDTH / 2 - 8, HEIGHT / 2))
+
 
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
