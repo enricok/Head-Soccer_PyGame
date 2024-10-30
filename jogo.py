@@ -1,6 +1,7 @@
 # ===== Inicialização =====
 # ----- Importa e inicia pacotes
 import pygame
+import math
 
 pygame.init()
 
@@ -34,9 +35,22 @@ gol1 = pygame.transform.scale(gol1, (80, 180))
 gol2 = pygame.image.load('assets/img/goalNormal2.png').convert_alpha()
 gol2 = pygame.transform.scale(gol2, (80, 180))
 
-# Bola
+# Bola: imagem
 bola = pygame.image.load('assets/img/pickupBall.png').convert_alpha()
-bola = pygame.transform.scale(bola, (22,22))
+# bola = pygame.transform.scale(bola, (22,22)) Trocado no final do código para mostrar a bola na tela
+
+# Bola: condições
+#Velocidade inicial da bola
+bola_speed_x = 0
+bola_speed_y = 0
+
+#Posição inicial da bola
+bola_x = WIDTH / 2 
+bola_y = HEIGHT / 2
+bola_r = 20
+
+# Gravidade a cada frame
+ACELERACAO = 9
 
 # Clock (determina FPS)
 clock = pygame.time.Clock()
@@ -130,7 +144,6 @@ class Player2 (pygame.sprite.Sprite):
             self.speedy = 0
             self.ta_no_chao = True 
             self.jumping = False
-    
 
 # ----- Criar o jogador 01 e jogador 02 + add ele em um grupo como do tutorial
 player1 = Player1(personagem1)
@@ -224,7 +237,19 @@ while game:
 
             if event.key == pygame.K_d:
                 player2.speedx -= 5
+        
+        # Bola se mexe quando clica em algum botão
+        if event.type == pygame.KEYDOWN:
+            bola_speed_y = -10
 
+        if screen == 2:
+            # Gravidade na bola
+            bola_speed_y += ACELERACAO
+            bola_y += bola_speed_y    
+
+            # Bola não cair da tela
+            if bola_y + bola_r >= HEIGHT:
+                bola_y = HEIGHT - bola_r
 
     # Código inspirado no https://stackoverflow.com/questions/42472019/flickering-text-in-pygame
     # Texto piscante
@@ -257,13 +282,12 @@ while game:
         window.blit (gol1 , (0, HEIGHT - 180))
         window.blit (gol2 , (WIDTH - 80, HEIGHT - 180))
 
-        # Informações sobre bola
-        window.blit (bola , (WIDTH / 2 - 8, HEIGHT / 2))
-
+        # Desenha a bola na janela
+        bola = pygame.transform.scale(bola, (bola_r, bola_r))
+        window.blit (bola , (bola_x - 9, bola_y))
 
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
 
 # ===== Finalização =====
 pygame.quit()  # Função do PyGame que finaliza os recursos utilizados
-
