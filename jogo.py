@@ -35,24 +35,9 @@ gol1 = pygame.transform.scale(gol1, (80, 180))
 gol2 = pygame.image.load('assets/img/goalNormal2.png').convert_alpha()
 gol2 = pygame.transform.scale(gol2, (80, 180))
 
-# Bola: imagem
+# Bola: imagem + scale
 bola = pygame.image.load('assets/img/pickupBall.png').convert_alpha()
-
-# bola = pygame.transform.scale(bola, (22,22)) Trocado no final do código para mostrar a bola na tela
-
-# Bola: condições
-
-#Velocidade inicial da bola
-bola_speed_x = 0
-bola_speed_y = 0
-
-#Posição inicial da bola
-bola_x = WIDTH / 2 
-bola_y = HEIGHT / 2
-bola_r = 20
-
-# Gravidade a cada frame
-ACELERACAO = 20
+bola = pygame.transform.scale(bola, (20, 20))
 
 # Clock (determina FPS)
 clock = pygame.time.Clock()
@@ -147,12 +132,52 @@ class Player2 (pygame.sprite.Sprite):
             self.ta_no_chao = True 
             self.jumping = False
 
+# ----- Função do movimento da Bola
+
+class Bola (pygame.sprite.Sprite):
+    def __init__(self, img):
+
+        pygame.sprite.Sprite.__init__(self)
+        
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.centerx = WIDTH / 2 
+        self.rect.bottom = HEIGHT / 2
+        self.rect.y = HEIGHT / 2
+        self.r = 20
+
+        self.speedx = 0
+        self.speedy = 0
+
+        self.aceleracao = 20
+
+    def update (self):
+
+         # Gravidade na bola
+        self.speedy += self.aceleracao
+        self.rect.y += self.speedy    
+
+        # Bola não cair da tela
+        if self.rect.y +  self.r  >= HEIGHT:
+            self.rect.y = HEIGHT -  self.r
+            self.speedy = 0
+
+        if player1.rect.colliderect(bola.rect):
+            bola.rect.x -= 9
+            bola.rect.y -= 2
+
+        if player2.rect.colliderect(bola.rect):
+            bola.rect.x += 9
+            bola.rect.y += 2
+
 # ----- Criar o jogador 01 e jogador 02 + add ele em um grupo como do tutorial
 player1 = Player1(personagem1)
 player2 = Player2 (personagem2)
+bola = Bola (bola)
 todos_sprites = pygame.sprite.Group()
 todos_sprites.add(player1)
 todos_sprites.add (player2)
+todos_sprites.add (bola)
 
 # ----- Inicia estruturas de dados
 game = True
@@ -242,17 +267,9 @@ while game:
         
         # Bola se mexe quando clica em algum botão
         if event.type == pygame.KEYDOWN:
-            bola_speed_y = -10
+            bola.speedy = -10           
 
-        if screen == 2:
-            # Gravidade na bola
-            bola_speed_y += ACELERACAO
-            bola_y += bola_speed_y    
-
-            # Bola não cair da tela
-            if bola_y + bola_r >= HEIGHT:
-                bola_y = HEIGHT - bola_r
-                bola_speed_y = 0
+    # Jogadores colidem um com o outro e não passam por cima do outro
 
     if player1.rect.colliderect(player2.rect):
         player1.rect.x = player1.rect.x + 8
@@ -269,6 +286,7 @@ while game:
     # Update jogadores posição atual
     player1.update()
     player2.update()
+    bola.update()
 
     # Troca de telas
     if screen == 1:
@@ -289,10 +307,6 @@ while game:
         # Informações sobre gols
         window.blit (gol1 , (0, HEIGHT - 180))
         window.blit (gol2 , (WIDTH - 80, HEIGHT - 180))
-
-        # Desenha a bola na janela
-        bola = pygame.transform.scale(bola, (bola_r, bola_r))
-        window.blit (bola , (bola_x - 9, bola_y))
 
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
