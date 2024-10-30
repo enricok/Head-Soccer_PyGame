@@ -30,20 +30,18 @@ personagem2 = pygame.transform.scale(personagem2, (50, 50))
 gol1 = pygame.image.load('assets/img/goalNormal.png').convert_alpha()
 gol1 = pygame.transform.scale(gol1, (80, 180))
 
-# Gol2
+# Gol 2
 gol2 = pygame.image.load('assets/img/goalNormal2.png').convert_alpha()
 gol2 = pygame.transform.scale(gol2, (80, 180))
 
-#Clock (determina FPS)
+# Clock (determina FPS)
 clock = pygame.time.Clock()
 
 # ----- Gera mensagem
-
 font = pygame.font.SysFont(None, 25)
 start = font.render('press "SPACE" to play', True, (255, 255, 255))
 
-# ----- Função do movimento do jogador 1
-
+# ----- Função do movimento do jogador 01
 class Player1 (pygame.sprite.Sprite):
     def __init__(self, img):
 
@@ -86,6 +84,7 @@ class Player1 (pygame.sprite.Sprite):
             self.ta_no_chao = True 
             self.jumping = False
 
+# ----- Função do movimento do jogador 02
 class Player2 (pygame.sprite.Sprite):
     def __init__(self, img):
 
@@ -128,8 +127,8 @@ class Player2 (pygame.sprite.Sprite):
             self.ta_no_chao = True 
             self.jumping = False
     
- # ----- Criar o jogador 1 e jogador 2 + add ele em um grupo como do tutorial
 
+# ----- Criar o jogador 01 e jogador 02 + add ele em um grupo como do tutorial
 player = Player1(personagem1)
 player2 = Player2 (personagem2)
 todos_sprites = pygame.sprite.Group()
@@ -162,49 +161,53 @@ while game:
             if event.key == pygame.K_SPACE: 
                 screen = 2
 
-            # Mexe o personagem para esquerda e direita, adicionando uma velocidade 
+
+            # Personagem 01 Movimento
+            # Mexe o personagem 01 para esquerda e direita, adicionando uma velocidade 
             if event.key == pygame.K_LEFT:
                 player.speedx -= 5
 
             if event.key == pygame.K_RIGHT:
                 player.speedx += 5
 
-            # Mexe o personagem 2 para esquerda e direita, adicionando uma velocidade 
+            # Pula apenas se o jogador tiver no chão (Player 01)
+            if event.key == pygame.K_UP and player.ta_no_chao == True:
+                player.ta_no_chao = False
+                player.jumping = True 
 
+            # Dash Player 01, quando shift tá apertado e direção apertada
+            if event.key == pygame.K_RSHIFT:
+                    if player.rect.x - 20 > 0 and player.speedx == -5:
+                        player.rect.x -= 50
+
+                    if player.rect.x + 20 < WIDTH and player.speedx == +5:
+                        player.rect.x += 50  
+
+
+            # Personagem 02 Movimento
+            # Mexe o personagem 02 para esquerda e direita, adicionando uma velocidade 
             if event.key == pygame.K_a:
                 player2.speedx -= 5
 
             if event.key == pygame.K_d:
                 player2.speedx += 5
 
+            # Pula apenas se o jogador tiver no chão (Player 02)
             if event.key == pygame.K_w and player2.ta_no_chao == True:
                 player2.ta_no_chao = False
                 player2.jumping = True  
 
-            # Dash Player 02, quando shift tá apertado e direção apertada
+            # Dash Player 02, quando q tá apertado e direção apertada
             if event.key == pygame.K_q:
                     if player2.rect.x - 20 > 0 and player2.speedx == -5:
                         player2.rect.x -= 50
 
                     if player2.rect.x + 20 < WIDTH and player2.speedx == +5:
-                        player2.rect.x += 50
-
-            # Dash, quando shift tá apertado e direção apertada
-            if event.key == pygame.K_RSHIFT:
-                    if player.rect.x - 20 > 0 and player.speedx == -5:
-                        player.rect.x -= 50
-
-                    if player.rect.x + 20 < WIDTH and player.speedx == +5:
-                        player.rect.x += 50
-
-            # Pula apenas se o jogador tiver no chão
-            if event.key == pygame.K_UP and player.ta_no_chao == True:
-                player.ta_no_chao = False
-                player.jumping = True                
+                        player2.rect.x += 50             
         
         elif event.type == pygame.KEYUP:
 
-            # Controla a velocidade, quando tirar da tecla para de mexer
+            # Controla a velocidade do personagem 1, quando tirar da tecla para de mexer
             if event.key == pygame.K_LEFT:
                 player.speedx += 5
     
@@ -219,31 +222,34 @@ while game:
                 player2.speedx -= 5
 
 
-    #código inspirado no https://stackoverflow.com/questions/42472019/flickering-text-in-pygame
-
+    # Código inspirado no https://stackoverflow.com/questions/42472019/flickering-text-in-pygame
+    #Texto piscante
     if piscar_texto >= 60: 
         mostrar = not mostrar  
         piscar_texto = 0
-
-    #Texto pisca + update jogadores posição atual
     piscar_texto += 1
-    player.update ()
+
+    # Update jogadores posição atual
+    player.update()
     player2.update()
 
-    #Troca de telas
+    # Troca de telas
     if screen == 1:
-        #Informação sobre screen 1
+        # Informação sobre screen 1
         window.fill((255,245,255))  # Preenche com a cor branca
         window.blit(logo_do_jogo, (0, 0))
+
+        # Informações sobre start
         if mostrar:
             window.blit (start, (256, 231))
 
     if screen == 2:
-        #Informação sobre screen 2
+        # Informação sobre screen 2
         window.fill((188,143,143))
         window.blit(gamescreen, (-50, 0))
         todos_sprites.draw(window)
-        #Informação sobre gols
+
+        # Informações sobre gols
         window.blit (gol1 , (0, HEIGHT - 180))
         window.blit (gol2 , (WIDTH - 80, HEIGHT - 180))
 
