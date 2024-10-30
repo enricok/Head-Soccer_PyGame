@@ -9,10 +9,16 @@ WIDTH = 700
 HEIGHT = 400
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Head Soccer!')
+
+# Tela de entrada
 logo_do_jogo = pygame.image.load('assets/img/5t.png').convert()
 logo_do_jogo = pygame.transform.scale(logo_do_jogo, (700, 400))
+
+# Personagem 1
 personagem1 = pygame.image.load('assets/img/Character01.png').convert_alpha()
 personagem1 = pygame.transform.scale(personagem1, (50, 50))
+
+# Tela principal
 gamescreen = pygame.image.load('assets/img/gamescreen.png').convert()
 gamescreen = pygame.transform.scale(gamescreen, (720, 500))
 
@@ -41,7 +47,7 @@ class Player1 (pygame.sprite.Sprite):
         self.jumpforce = -35
         self.jumping = False
 
-    def update  (self):
+    def update (self):
 
         self.rect.x += self.speedx 
 
@@ -57,7 +63,6 @@ class Player1 (pygame.sprite.Sprite):
             self.rect.y += self.speedy
 
         self.speedy += self.gravity
-        print(self.speedy) 
         self.rect.y += self.speedy
 
         if self.rect.bottom >= HEIGHT:  
@@ -95,22 +100,35 @@ while game:
 
         elif event.type == pygame.KEYDOWN:
 
-            if event.key == pygame.K_SPACE:
+            # Leva para a segunda tela
+            if event.key == pygame.K_SPACE: 
                 screen = 2
             if event.key == pygame.K_LEFT:
                 player.speedx -= 5
+
+            # Dash, quando shift tá apertado e direção apertada
+            if event.key == pygame.K_RSHIFT:
+                    if player.rect.x - 20 > 0 and player.speedx == -5:
+                        player.rect.x -= 50
+                    if player.rect.x + 20 < WIDTH and player.speedx == +5:
+                        player.rect.x += 50
+
             if event.key == pygame.K_RIGHT:
                 player.speedx += 5
+
+            # Pula apenas se o jogador tiver no chão
             if event.key == pygame.K_UP and player.ta_no_chao == True:
                 player.ta_no_chao = False
-                player.jumping = True
+                player.jumping = True                
         
         elif event.type == pygame.KEYUP:
 
+            # Controla a velocidade, quando tirar da tecla para de mexer
             if event.key == pygame.K_LEFT:
                 player.speedx += 5
             if event.key == pygame.K_RIGHT:
                 player.speedx -= 5
+                
 
     #código inspirado no https://stackoverflow.com/questions/42472019/flickering-text-in-pygame
 
