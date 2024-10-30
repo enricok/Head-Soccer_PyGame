@@ -128,7 +128,7 @@ class Player2 (pygame.sprite.Sprite):
             self.ta_no_chao = True 
             self.jumping = False
     
- # ----- Criar o jogador 1 + add ele em um grupo como do tutorial
+ # ----- Criar o jogador 1 e jogador 2 + add ele em um grupo como do tutorial
 
 player = Player1(personagem1)
 player2 = Player2 (personagem2)
@@ -137,7 +137,6 @@ todos_sprites.add(player)
 todos_sprites.add (player2)
 
 # ----- Inicia estruturas de dados
-
 game = True
 screen = 1
 piscar_texto = 0
@@ -226,22 +225,25 @@ while game:
         mostrar = not mostrar  
         piscar_texto = 0
 
-    ####
-
+    #Texto pisca + update jogadores posição atual
     piscar_texto += 1
     player.update ()
     player2.update()
 
+    #Troca de telas
     if screen == 1:
+        #Informação sobre screen 1
         window.fill((255,245,255))  # Preenche com a cor branca
         window.blit(logo_do_jogo, (0, 0))
         if mostrar:
             window.blit (start, (256, 231))
 
     if screen == 2:
+        #Informação sobre screen 2
         window.fill((188,143,143))
         window.blit(gamescreen, (-50, 0))
         todos_sprites.draw(window)
+        #Informação sobre gols
         window.blit (gol1 , (0, HEIGHT - 180))
         window.blit (gol2 , (WIDTH - 80, HEIGHT - 180))
 
