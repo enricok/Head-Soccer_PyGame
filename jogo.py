@@ -14,15 +14,15 @@ pygame.display.set_caption('Head Soccer!')
 logo_do_jogo = pygame.image.load('assets/img/5t.png').convert()
 logo_do_jogo = pygame.transform.scale(logo_do_jogo, (700, 400))
 
-# Personagem 1
-personagem1 = pygame.image.load('assets/img/Character01.png').convert_alpha()
-personagem1 = pygame.transform.scale(personagem1, (50, 50))
-
-# Tela principal
+# Gamescreen
 gamescreen = pygame.image.load('assets/img/gamescreen.png').convert()
 gamescreen = pygame.transform.scale(gamescreen, (800, 400))
 
-# Personagem 2
+# Personagem 1 (Olha para a esquerda)
+personagem1 = pygame.image.load('assets/img/Character01.png').convert_alpha()
+personagem1 = pygame.transform.scale(personagem1, (50, 50))
+
+# Personagem 2 (Olha para a direita)
 personagem2 = pygame.image.load('assets/img/player02.png').convert_alpha()
 personagem2 = pygame.transform.scale(personagem2, (50, 50))
 
@@ -129,10 +129,10 @@ class Player2 (pygame.sprite.Sprite):
     
 
 # ----- Criar o jogador 01 e jogador 02 + add ele em um grupo como do tutorial
-player = Player1(personagem1)
+player1 = Player1(personagem1)
 player2 = Player2 (personagem2)
 todos_sprites = pygame.sprite.Group()
-todos_sprites.add(player)
+todos_sprites.add(player1)
 todos_sprites.add (player2)
 
 # ----- Inicia estruturas de dados
@@ -165,23 +165,23 @@ while game:
             # Personagem 01 Movimento
             # Mexe o personagem 01 para esquerda e direita, adicionando uma velocidade 
             if event.key == pygame.K_LEFT:
-                player.speedx -= 5
+                player1.speedx -= 5
 
             if event.key == pygame.K_RIGHT:
-                player.speedx += 5
+                player1.speedx += 5
 
             # Pula apenas se o jogador tiver no chão (Player 01)
-            if event.key == pygame.K_UP and player.ta_no_chao == True:
-                player.ta_no_chao = False
-                player.jumping = True 
+            if event.key == pygame.K_UP and player1.ta_no_chao == True:
+                player1.ta_no_chao = False
+                player1.jumping = True 
 
             # Dash Player 01, quando shift tá apertado e direção apertada
             if event.key == pygame.K_RSHIFT:
-                    if player.rect.x - 20 > 0 and player.speedx == -5:
-                        player.rect.x -= 50
+                    if player1.rect.x - 20 > 0 and player1.speedx == -5:
+                        player1.rect.x -= 50
 
-                    if player.rect.x + 20 < WIDTH and player.speedx == +5:
-                        player.rect.x += 50  
+                    if player1.rect.x + 20 < WIDTH and player1.speedx == +5:
+                        player1.rect.x += 50  
 
 
             # Personagem 02 Movimento
@@ -209,10 +209,10 @@ while game:
 
             # Controla a velocidade do personagem 1, quando tirar da tecla para de mexer
             if event.key == pygame.K_LEFT:
-                player.speedx += 5
+                player1.speedx += 5
     
             if event.key == pygame.K_RIGHT:
-                player.speedx -= 5
+                player1.speedx -= 5
             
             # Controla a velocidade do personagem 2, quando tirar da tecla para de mexer
             if event.key == pygame.K_a:
@@ -230,7 +230,7 @@ while game:
     piscar_texto += 1
 
     # Update jogadores posição atual
-    player.update()
+    player1.update()
     player2.update()
 
     # Troca de telas
