@@ -103,8 +103,12 @@ while game:
             # Leva para a segunda tela
             if event.key == pygame.K_SPACE: 
                 screen = 2
+
+            # Mexe o personagem para esquerda e direita, adicionando uma velocidade 
             if event.key == pygame.K_LEFT:
                 player.speedx -= 5
+            if event.key == pygame.K_RIGHT:
+                player.speedx += 5
 
             # Dash, quando shift tá apertado e direção apertada
             if event.key == pygame.K_RSHIFT:
@@ -112,9 +116,6 @@ while game:
                         player.rect.x -= 50
                     if player.rect.x + 20 < WIDTH and player.speedx == +5:
                         player.rect.x += 50
-
-            if event.key == pygame.K_RIGHT:
-                player.speedx += 5
 
             # Pula apenas se o jogador tiver no chão
             if event.key == pygame.K_UP and player.ta_no_chao == True:
