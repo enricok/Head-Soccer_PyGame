@@ -20,10 +20,25 @@ personagem1 = pygame.transform.scale(personagem1, (50, 50))
 
 # Tela principal
 gamescreen = pygame.image.load('assets/img/gamescreen.png').convert()
-gamescreen = pygame.transform.scale(gamescreen, (720, 500))
+gamescreen = pygame.transform.scale(gamescreen, (800, 400))
 
+# Personagem 2
+personagem2 = pygame.image.load('assets/img/player02.png').convert_alpha()
+personagem2 = pygame.transform.scale(personagem2, (50, 50))
+
+# Gol 1
+gol1 = pygame.image.load('assets/img/goalNormal.png').convert_alpha()
+gol1 = pygame.transform.scale(gol1, (80, 180))
+
+# Gol2
+gol2 = pygame.image.load('assets/img/goalNormal2.png').convert_alpha()
+gol2 = pygame.transform.scale(gol2, (80, 180))
+
+#Clock (determina FPS)
 clock = pygame.time.Clock()
+
 # ----- Gera mensagem
+
 font = pygame.font.SysFont(None, 25)
 start = font.render('press "SPACE" to play', True, (255, 255, 255))
 
@@ -36,7 +51,7 @@ class Player1 (pygame.sprite.Sprite):
         
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.centerx = WIDTH / 2
+        self.rect.centerx = (WIDTH / 4) * 3
         self.rect.bottom = HEIGHT - 10
 
         self.speedx = 0
@@ -44,7 +59,7 @@ class Player1 (pygame.sprite.Sprite):
 
         self.gravity = 5
         self.ta_no_chao = True
-        self.jumpforce = -35
+        self.jumpforce = -30
         self.jumping = False
 
     def update (self):
@@ -70,12 +85,56 @@ class Player1 (pygame.sprite.Sprite):
             self.speedy = 0
             self.ta_no_chao = True 
             self.jumping = False
-                
+
+class Player2 (pygame.sprite.Sprite):
+    def __init__(self, img):
+
+        pygame.sprite.Sprite.__init__(self)
+        
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.centerx = WIDTH / 4
+        self.rect.bottom = HEIGHT - 10
+
+        self.speedx = 0
+        self.speedy = 0
+
+        self.gravity = 5
+        self.ta_no_chao = True
+        self.jumpforce = -30
+        self.jumping = False
+
+    def update (self):
+
+        self.rect.x += self.speedx 
+
+        if self.rect.right > WIDTH:
+            self.rect.right = WIDTH
+
+        if self.rect.left < 0:
+            self.rect.left = 0
+        
+        if self.ta_no_chao == False and self.jumping == True:
+            self.jumping = False
+            self.speedy += self.jumpforce 
+            self.rect.y += self.speedy
+
+        self.speedy += self.gravity
+        self.rect.y += self.speedy
+
+        if self.rect.bottom >= HEIGHT:  
+            self.rect.bottom = HEIGHT  
+            self.speedy = 0
+            self.ta_no_chao = True 
+            self.jumping = False
+    
  # ----- Criar o jogador 1 + add ele em um grupo como do tutorial
 
 player = Player1(personagem1)
+player2 = Player2 (personagem2)
 todos_sprites = pygame.sprite.Group()
 todos_sprites.add(player)
+todos_sprites.add (player2)
 
 # ----- Inicia estruturas de dados
 
@@ -107,13 +166,35 @@ while game:
             # Mexe o personagem para esquerda e direita, adicionando uma velocidade 
             if event.key == pygame.K_LEFT:
                 player.speedx -= 5
+
             if event.key == pygame.K_RIGHT:
                 player.speedx += 5
+
+            # Mexe o personagem 2 para esquerda e direita, adicionando uma velocidade 
+
+            if event.key == pygame.K_a:
+                player2.speedx -= 5
+
+            if event.key == pygame.K_d:
+                player2.speedx += 5
+
+            if event.key == pygame.K_w and player2.ta_no_chao == True:
+                player2.ta_no_chao = False
+                player2.jumping = True  
+
+            # Dash Player 02, quando shift tá apertado e direção apertada
+            if event.key == pygame.K_q:
+                    if player2.rect.x - 20 > 0 and player2.speedx == -5:
+                        player2.rect.x -= 50
+
+                    if player2.rect.x + 20 < WIDTH and player2.speedx == +5:
+                        player2.rect.x += 50
 
             # Dash, quando shift tá apertado e direção apertada
             if event.key == pygame.K_RSHIFT:
                     if player.rect.x - 20 > 0 and player.speedx == -5:
                         player.rect.x -= 50
+
                     if player.rect.x + 20 < WIDTH and player.speedx == +5:
                         player.rect.x += 50
 
@@ -127,9 +208,17 @@ while game:
             # Controla a velocidade, quando tirar da tecla para de mexer
             if event.key == pygame.K_LEFT:
                 player.speedx += 5
+    
             if event.key == pygame.K_RIGHT:
                 player.speedx -= 5
-                
+            
+            # Controla a velocidade do personagem 2, quando tirar da tecla para de mexer
+            if event.key == pygame.K_a:
+                player2.speedx += 5
+
+            if event.key == pygame.K_d:
+                player2.speedx -= 5
+
 
     #código inspirado no https://stackoverflow.com/questions/42472019/flickering-text-in-pygame
 
@@ -141,6 +230,7 @@ while game:
 
     piscar_texto += 1
     player.update ()
+    player2.update()
 
     if screen == 1:
         window.fill((255,245,255))  # Preenche com a cor branca
@@ -150,8 +240,10 @@ while game:
 
     if screen == 2:
         window.fill((188,143,143))
-        window.blit(gamescreen, (0, -3))
+        window.blit(gamescreen, (-50, 0))
         todos_sprites.draw(window)
+        window.blit (gol1 , (0, HEIGHT - 180))
+        window.blit (gol2 , (WIDTH - 80, HEIGHT - 180))
 
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
