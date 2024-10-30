@@ -37,9 +37,11 @@ gol2 = pygame.transform.scale(gol2, (80, 180))
 
 # Bola: imagem
 bola = pygame.image.load('assets/img/pickupBall.png').convert_alpha()
+
 # bola = pygame.transform.scale(bola, (22,22)) Trocado no final do código para mostrar a bola na tela
 
 # Bola: condições
+
 #Velocidade inicial da bola
 bola_speed_x = 0
 bola_speed_y = 0
@@ -50,7 +52,7 @@ bola_y = HEIGHT / 2
 bola_r = 20
 
 # Gravidade a cada frame
-ACELERACAO = 9
+ACELERACAO = 20
 
 # Clock (determina FPS)
 clock = pygame.time.Clock()
@@ -250,12 +252,18 @@ while game:
             # Bola não cair da tela
             if bola_y + bola_r >= HEIGHT:
                 bola_y = HEIGHT - bola_r
+                bola_speed_y = 0
+
+    if player1.rect.colliderect(player2.rect):
+        player1.rect.x = player1.rect.x + 8
+        player2.rect.x = player2.rect.x - 8
 
     # Código inspirado no https://stackoverflow.com/questions/42472019/flickering-text-in-pygame
     # Texto piscante
     if piscar_texto >= 60: 
         mostrar = not mostrar  
         piscar_texto = 0
+
     piscar_texto += 1
 
     # Update jogadores posição atual
