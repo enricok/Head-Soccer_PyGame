@@ -50,7 +50,6 @@ clock = pygame.time.Clock()
 font = pygame.font.SysFont(None, 25)
 start = font.render('press "SPACE" to play', True, (255, 255, 255))
 
-
 # ----- Função do movimento do jogador 01
 class Player1 (pygame.sprite.Sprite):
     def __init__(self, img):
@@ -151,7 +150,6 @@ class Bola (pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH / 2 
         self.rect.bottom = HEIGHT / 2
-        self.rect.y = HEIGHT / 2
         self.r = 30
 
         self.speedx = 0
@@ -162,33 +160,35 @@ class Bola (pygame.sprite.Sprite):
     def update (self):
 
          # Gravidade na bola
-        self.speedy += self.aceleracao
-        self.rect.y += self.speedy    
+        if self.rect.bottom != HEIGHT:
+            self.speedy += self.aceleracao
+            self.rect.y += self.speedy    
 
         # Bola não cair da tela
         if self.rect.y +  self.r  >= HEIGHT:
             self.rect.y = HEIGHT -  self.r
             self.speedy = 0
 
-        if player1.rect.colliderect(bola.rect):
+        if player1.rect.colliderect(self.rect):
             bola.rect.x -= 9
             bola.rect.y -= 2
 
-        if player2.rect.colliderect(bola.rect):
+        if player2.rect.colliderect(self.rect):
             bola.rect.x += 9
-            bola.rect.y += 2
-        
-        if bola.rect.x >= HEIGHT:
+            bola.rect.y += 2    
+
+        if bola.rect.x + bola.r >= WIDTH:
             bola.rect.x -= 10
+
         if bola.rect.x <= 0:
             bola.rect.x += 10
 
         if bola.rect.left <= 47:
             player1.pontuacao += 1
-
-        if bola.rect.right >= HEIGHT - 47:
+            
+        if bola.rect.right >= HEIGHT:
             player2.pontuacao += 1
-
+        
 # ----- Criar o jogador 01 e jogador 02 + add ele em um grupo como do tutorial
 player1 = Player1(personagem1)
 player2 = Player2(personagem2)
@@ -323,6 +323,9 @@ while game:
         # Informações sobre gols
         window.blit (gol1 , (0, HEIGHT - 180))
         window.blit (gol2 , (WIDTH - 80, HEIGHT - 180))
+
+        #Pontuação
+
 
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
