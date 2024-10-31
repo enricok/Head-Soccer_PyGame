@@ -50,6 +50,7 @@ clock = pygame.time.Clock()
 font = pygame.font.SysFont(None, 25)
 start = font.render('press "SPACE" to play', True, (255, 255, 255))
 
+
 # ----- Função do movimento do jogador 01
 class Player1 (pygame.sprite.Sprite):
     def __init__(self, img):
@@ -68,6 +69,8 @@ class Player1 (pygame.sprite.Sprite):
         self.ta_no_chao = True
         self.jumpforce = -30
         self.jumping = False
+
+        self.pontuacao = 0
 
     def update (self):
 
@@ -111,6 +114,8 @@ class Player2 (pygame.sprite.Sprite):
         self.ta_no_chao = True
         self.jumpforce = -30
         self.jumping = False
+
+        self.pontuacao = 0
 
     def update (self):
 
@@ -172,6 +177,17 @@ class Bola (pygame.sprite.Sprite):
         if player2.rect.colliderect(bola.rect):
             bola.rect.x += 9
             bola.rect.y += 2
+        
+        if bola.rect.x >= HEIGHT:
+            bola.rect.x -= 10
+        if bola.rect.x <= 0:
+            bola.rect.x += 10
+
+        if bola.rect.left <= 47:
+            player1.pontuacao += 1
+
+        if bola.rect.right >= HEIGHT - 47:
+            player2.pontuacao += 1
 
 # ----- Criar o jogador 01 e jogador 02 + add ele em um grupo como do tutorial
 player1 = Player1(personagem1)
