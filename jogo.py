@@ -313,7 +313,7 @@ while game:
         # Informações sobre start
         if mostrar:
             window.blit (start, (256, 231))
-
+            
     if screen == 2:
         # Informação sobre screen 2
         window.fill((188,143,143))
