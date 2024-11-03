@@ -10,6 +10,10 @@ WIDTH = 700
 HEIGHT = 400
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Head Soccer!')
+info1_screen_duration = 2000  # Duracao da tela de informação
+info1_screen_start_time = 0 # Começou o relógio ou não, varíavel que controla isso
+
+info2_screen_duration = 600 # Duracao da segunda tela de informação
 
 # Tela de entrada
 logo_do_jogo = pygame.image.load('assets/img/5t.png').convert()
@@ -43,10 +47,16 @@ bola = pygame.transform.scale(bola, (30, 30))
 informacao = pygame.image.load('assets/img/info.png').convert()
 informacao = pygame.transform.scale(informacao, (700, 400))
 
+# Tela de informação 2
+
+informacao2 = pygame.image.load('assets/img/info2.png').convert()
+informacao2 = pygame.transform.scale(informacao2, (700, 400))
+
 # Clock (determina FPS)
 clock = pygame.time.Clock()
 
 # ----- Gera mensagem
+gol_fonte = pygame.font.SysFont(None, 30)  
 font = pygame.font.SysFont(None, 25)
 start = font.render('press "SPACE" to play', True, (255, 255, 255))
 
@@ -157,6 +167,8 @@ class Bola (pygame.sprite.Sprite):
         self.aceleracao = 0.5  #Gravidade
         self.restituicao = 0.8  #Perda de energia (restituição)
 
+        self.atravessou = False # fez gol?
+
     def update (self):
         #Atualiza posição
         self.rect.x += self.speedx
@@ -187,20 +199,23 @@ class Bola (pygame.sprite.Sprite):
             bola.rect.y += 2   
             self.speedx = -self.speedx * self.restituicao 
 
-        #Colisões com boras
+        #Colisões com bordas
         if bola.rect.x + bola.r >= WIDTH:
             bola.rect.x -= 10
 
         if bola.rect.x <= 0:
             bola.rect.x += 10
 
-        if bola.rect.left <= 47:
+        #Pontuação
+        if self.rect.left <= 47 and not self.atravessou:
             player1.pontuacao += 1
-            self.reset_position() #Volta bola ao inicio se tiver gol
-            
-        if bola.rect.right >= HEIGHT:
+            self.atravessou = True  # Gol valeu
+            self.reset_position()
+
+        elif self.rect.left >= 700 - 52 and not self.atravessou:
             player2.pontuacao += 1
-            self.reset_position() #Volta bola ao inicio se tiver gol
+            self.atravessou = True  # Gol valeu
+            self.reset_position()
 
     def reset_position(self):
         #Reseta a bola e recomeca velocidades
@@ -208,6 +223,7 @@ class Bola (pygame.sprite.Sprite):
         self.rectbottom = HEIGHT / 2
         self.speedx = 0
         self.speedy = -10
+        self.atravessou = False #reseta a variável de gol ou não
         
 # ----- Criar o jogador 01 e jogador 02 + add ele em um grupo como do tutorial
 player1 = Player1(personagem1)
@@ -223,6 +239,7 @@ game = True
 screen = 1
 piscar_texto = 0
 mostrar = True
+nova_time = 0
 
 # ===== Loop principal =====
 while game:
@@ -242,7 +259,9 @@ while game:
 
             # Leva para a segunda tela
             if event.key == pygame.K_SPACE: 
-                screen = 2
+                if screen == 1:
+                    screen = "info_screen"
+                    info_screen_start_time = pygame.time.get_ticks()  # Marca o tempo atual
 
             # Personagem 01 Movimento
             # Mexe o personagem 01 para esquerda e direita, adicionando uma velocidade 
@@ -300,11 +319,11 @@ while game:
                 player2.speedx += 5
 
             if event.key == pygame.K_d:
-                player2.speedx -= 5
+                player2.speedx -= 5 
         
-        # Bola se mexe quando clica em algum botão
-        # if event.type == pygame.KEYDOWN:
-        #     bola.speedy = -10           
+    nova_time += 1
+
+    current_time = pygame.time.get_ticks() # tempo atual (usar a função que conta o tempo do PyGame)
 
     # Jogadores colidem um com o outro e não passam por cima do outro
     if player1.rect.colliderect(player2.rect):
@@ -333,8 +352,23 @@ while game:
         # Informações sobre start
         if mostrar:
             window.blit (start, (256, 231))
+
+    elif screen == "info_screen":
+        # Tela de informação
+        window.fill((0, 0, 0))  # Cor de fundo para a tela de informação
+        window.blit(informacao, (0, 0))
+
+    # Verifica se a duração da tela de informação passou
+        if (current_time - info_screen_start_time > info1_screen_duration):
+            screen = "info2_screen" # Vai para a tela2 de informação após o tempo definido
+
+    elif screen == "info2_screen":
+        window.fill((0, 0, 0))  
+        window.blit(informacao2, (0, 0))
+        if nova_time - 0 > info2_screen_duration:
+            screen = 2
             
-    if screen == 2:
+    elif screen == 2:
         # Informação sobre screen 2
         window.fill((188,143,143))
         window.blit(gamescreen, (-50, 0))
@@ -345,7 +379,12 @@ while game:
         window.blit (gol2 , (WIDTH - 80, HEIGHT - 180))
 
         #Pontuação
-
+        player1_gol_fonte = gol_fonte.render(f"Player 1: {player1.pontuacao}", True, (255, 255, 255))
+        player2_gol_fonte = gol_fonte.render(f"Player 2: {player2.pontuacao}", True, (255, 255, 255))
+    
+        # Mostrar a pontuação
+        window.blit(player1_gol_fonte, (50, 20))
+        window.blit(player2_gol_fonte, (WIDTH - 200, 20)) 
 
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
