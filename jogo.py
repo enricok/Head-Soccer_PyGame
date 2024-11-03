@@ -170,7 +170,7 @@ class Bola (pygame.sprite.Sprite):
             self.rect.bottom = HEIGHT
             self.speedy = -self.speedy * self.restituicao #Bater no chão e voltar pra cima
             if abs(self.speedy) < 1: #Não deixar a bola pular para sempre
-                self.speedy = 0 #Visto em https://www.reddit.com/r/pygame/s/YYwvxHjkPZ
+                self.speedy = 0 #Visto em https://www.reddit.com/r/pygame/s/YYwvxHjkPZ / https://github.com/sk-Prime/simple_pygames
 
         if self.rect.top <= 0:
             self.rect.top = 0
