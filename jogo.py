@@ -152,31 +152,42 @@ class Bola (pygame.sprite.Sprite):
         self.rect.bottom = HEIGHT / 2
         self.r = 30
 
-        self.speedx = 0
-        self.speedy = 0
-
-        self.aceleracao = 20
+        self.speedx = 0  #Velocidade x
+        self.speedy = -10  #Velocidade y
+        self.aceleracao = 0.5  #Gravidade
+        self.restituicao = 0.8  #Perda de energia (restituição)
 
     def update (self):
+        #Atualiza posição
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy 
 
-         # Gravidade na bola
-        if self.rect.bottom != HEIGHT:
-            self.speedy += self.aceleracao
-            self.rect.y += self.speedy    
+        #Gravidade
+        self.speedy += self.aceleracao   
 
-        # Bola não cair da tela
-        if self.rect.y +  self.r  >= HEIGHT:
-            self.rect.y = HEIGHT -  self.r
-            self.speedy = 0
+        #Bola não cair da tela, nem passar do teto
+        if self.rect.bottom >= HEIGHT:
+            self.rect.bottom = HEIGHT
+            self.speedy = -self.speedy * self.restituicao #Bater no chão e voltar pra cima
+            if abs(self.speedy) < 1: #Não deixar a bola pular para sempre
+                self.speedy = 0 #Visto em https://www.reddit.com/r/pygame/s/YYwvxHjkPZ
 
+        if self.rect.top <= 0:
+            self.rect.top = 0
+            self.speedy = -self.speedy * self.restituicao
+        
+        #Colisões com jogadores
         if player1.rect.colliderect(self.rect):
             bola.rect.x -= 9
             bola.rect.y -= 2
+            self.speedx = -self.speedx * self.restituicao
 
         if player2.rect.colliderect(self.rect):
             bola.rect.x += 9
-            bola.rect.y += 2    
+            bola.rect.y += 2   
+            self.speedx = -self.speedx * self.restituicao 
 
+        #Colisões com boras
         if bola.rect.x + bola.r >= WIDTH:
             bola.rect.x -= 10
 
@@ -185,9 +196,18 @@ class Bola (pygame.sprite.Sprite):
 
         if bola.rect.left <= 47:
             player1.pontuacao += 1
+            self.reset_position() #Volta bola ao inicio se tiver gol
             
         if bola.rect.right >= HEIGHT:
             player2.pontuacao += 1
+            self.reset_position() #Volta bola ao inicio se tiver gol
+
+    def reset_position(self):
+        #Reseta a bola e recomeca velocidades
+        self.rect.centerx = WIDTH / 2
+        self.rectbottom = HEIGHT / 2
+        self.speedx = 0
+        self.speedy = -10
         
 # ----- Criar o jogador 01 e jogador 02 + add ele em um grupo como do tutorial
 player1 = Player1(personagem1)
