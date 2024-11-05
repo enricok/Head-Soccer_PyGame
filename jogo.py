@@ -1,7 +1,6 @@
 # ===== Inicialização =====
 # ----- Importa e inicia pacotes
 import pygame
-import math
 import random
 
 pygame.init()
