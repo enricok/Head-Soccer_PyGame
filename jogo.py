@@ -501,9 +501,9 @@ while game:
         todos_sprites.draw(window)
 
         #Pontuação
-        rect_x1, rect_y1 = WIDTH - 190, 10   # Rectangle position
-        rect_x2, rect_y2 = 100, 10   # Rectangle position
-        rect_width, rect_height = 90, 90  # Rectangle size, smaller than the screen
+        rect_x1, rect_y1 = WIDTH - 195, 10   # Rectangle position
+        rect_x2, rect_y2 = 95, 10   # Rectangle position
+        rect_width, rect_height = 115, 90  # Rectangle size, smaller than the screen
 
         #pygame.draw.rect (window, (0, 0, 0), (0,230,80,170))
         #pygame.draw.rect (window, (0, 0, 0), (620,230,80,170))
@@ -515,8 +515,8 @@ while game:
         player2_gol_fonte = gol_fonte.render(f"{player2.pontuacao}", True, (255, 0, 0))
     
         # Mostrar a pontuação
-        window.blit(player1_gol_fonte, (WIDTH - 164, 25))
-        window.blit(player2_gol_fonte, (125, 25)) 
+        window.blit(player1_gol_fonte, (WIDTH - 170, 25))
+        window.blit(player2_gol_fonte, (120, 25)) 
 
         # Update jogadores posição atual
         player1.update()
