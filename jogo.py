@@ -40,7 +40,7 @@ gol2 = pygame.image.load('assets/img/goalNormal2.png').convert_alpha()
 gol2 = pygame.transform.scale(gol2, (80, 180))
 
 # Bola: imagem + scale
-bola = pygame.image.load('assets/img/pickupBall.png').convert_alpha()
+bola = pygame.image.load('assets/img/brazuca.png').convert_alpha()
 bola = pygame.transform.scale(bola, (30, 30))
 
 # Tela de informação
@@ -351,12 +351,29 @@ class Bola (pygame.sprite.Sprite):
             player1.reset_position()
             self.atravessou = True  # Gol valeu
             self.reset_position()
+            if player2.frozen == True:
+                player2.frozen == False
+            if player1.frozen == True:
+                player1.frozen == False
+            if player2.sized == True:
+                player2.sized == False
+            if player1.sized == True:
+                player1.sized == False
+            
 
         elif (self.rect.left > gol2.rect.left and self.rect.top > gol2.rect.top and not self.atravessou and not self.rect.colliderect(gol2.travessao_rect)):
             player2.pontuacao += 1
             player2.reset_position()
             self.atravessou = True  # Gol valeu
             self.reset_position()
+            if player2.frozen == True:
+                player2.frozen == False
+            if player1.frozen == True:
+                player1.frozen == False
+            if player2.sized == True:
+                player2.sized == False
+            if player1.sized == True:
+                player1.sized == False
         
     def reset_position(self):
         #Reseta a bola e recomeca velocidades
