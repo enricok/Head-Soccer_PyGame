@@ -59,6 +59,10 @@ freeze = pygame.transform.scale(freeze, (30, 30))
 size = pygame.image.load('assets/images/pickupSize.png').convert_alpha()
 size = pygame.transform.scale(size, (30, 30))
 
+#Status Frozen
+status_frozen = pygame.image.load('assets/images/statusFrozen.png').convert_alpha()
+status_frozen = pygame.transform.scale(status_frozen, (30, 30))
+
 # Clock (determina FPS)
 clock = pygame.time.Clock()
 
@@ -429,6 +433,22 @@ class Size (pygame.sprite.Sprite):
         self.rect.x = random.randint(180 + 20, WIDTH - 200)
         self.rect.y = random.randint(180 + 70, HEIGHT - 20)
 
+class StatusFrozen (pygame.sprite.Sprite):
+    def __init__(self, img):
+
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = img
+        self.rect = self.image.get_rect()
+
+        if player1.frozen == True:
+            self.rect.x = player1.rect.x
+            self.rect.y = player1.rect.y
+
+        if player2.frozen == True:
+            self.rect.x = player2.rect.x
+            self.rect.y = player2.rect.y
+
 # ----- Criar o jogador 01 e jogador 02 + add ele em um grupo como do tutorial
 player1 = Player1(personagem1)
 player2 = Player2(personagem2)
@@ -437,6 +457,7 @@ gol1 = Gol (gol1)
 gol2 = Gol2 (gol2)
 freeze = Freeze (freeze)
 size = Size (size)
+status_frozen = StatusFrozen (status_frozen)
 todos_sprites = pygame.sprite.Group()
 todos_sprites.add(player1)
 todos_sprites.add(player2)
@@ -445,6 +466,7 @@ todos_sprites.add (gol1)
 todos_sprites.add (gol2)
 todos_sprites.add (freeze)
 todos_sprites.add (size)
+todos_sprites.add (status_frozen)
 
 # ----- Inicia estruturas de dados
 game = True
@@ -611,6 +633,7 @@ while game:
         bola.update()
         freeze.update ()
         size.update()
+        status_frozen.update()
 
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
