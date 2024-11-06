@@ -87,6 +87,7 @@ class Player1 (pygame.sprite.Sprite):
         self.jumping = False
 
         self.pontuacao = 0
+        self.pontuacao_anterior = 0
 
         self.frozen = False
         self.frozen_count = 0
@@ -126,10 +127,21 @@ class Player1 (pygame.sprite.Sprite):
             player2.frozen_count = pygame.time.get_ticks()
             todos_sprites.remove(freeze)
 
-        if self.frozen and pygame.time.get_ticks() - self.frozen_count > 3000:  
+        if self.frozen and pygame.time.get_ticks() - self.frozen_count > 2000:  
             self.frozen = False
-            self.frozen_count = 0 
-            todos_sprites.add(freeze) 
+            self.frozen_count = 0
+        
+        if player1.pontuacao_anterior < player1.pontuacao:
+            freeze.rect.x = random.randint(180 + 20, WIDTH - 200)
+            freeze.rect.y = random.randint(180 + 70, HEIGHT - 20)
+            if freeze not in todos_sprites:
+                todos_sprites.add(freeze)
+
+        if player2.pontuacao_anterior < player2.pontuacao:
+            freeze.rect.x = random.randint(180 + 20, WIDTH - 200)
+            freeze.rect.y = random.randint(180 + 70, HEIGHT - 20)
+            if freeze not in todos_sprites:
+                todos_sprites.add(freeze)
 
         if size in todos_sprites and self.rect.colliderect(size.rect):
             player2.rect.top = 50
@@ -138,12 +150,24 @@ class Player1 (pygame.sprite.Sprite):
             player2.size_count = pygame.time.get_ticks()
             todos_sprites.remove(size)
 
-        if self.sized == True and pygame.time.get_ticks() - self.size_count > 3000:
+        if self.sized == True and pygame.time.get_ticks() - self.size_count > 2000:
             player2.rect.top = HEIGHT - 30
             player2.rect.centerx = (WIDTH / 4) * 3
             self.sized = False
-            self.size_count = 0
-            todos_sprites.add(size) 
+            
+        if player1.pontuacao_anterior < player1.pontuacao:
+            size.rect.x = random.randint(180 + 20, WIDTH - 200)
+            size.rect.y = random.randint(180 + 70, HEIGHT - 20)
+            if size not in todos_sprites:
+                todos_sprites.add(size)
+            player1.pontuacao_anterior = player1.pontuacao
+
+        if player2.pontuacao_anterior < player2.pontuacao:
+            size.rect.x = random.randint(180 + 20, WIDTH - 200)
+            size.rect.y = random.randint(180 + 70, HEIGHT - 20)
+            if size not in todos_sprites:
+                todos_sprites.add(size)
+            player2.pontuacao_anterior = player2.pontuacao
 
     def reset_position(self):
         #Reseta a bola e recomeca velocidades
@@ -172,6 +196,7 @@ class Player2 (pygame.sprite.Sprite):
         self.jumping = False
 
         self.pontuacao = 0
+        self.pontuacao_anterior = 0
         self.frozen = False
 
         self.frozen_count = 0
@@ -211,10 +236,21 @@ class Player2 (pygame.sprite.Sprite):
             player1.frozen_count = pygame.time.get_ticks() #usar o clock do python
             todos_sprites.remove(freeze) 
 
-        if self.frozen and pygame.time.get_ticks() - self.frozen_count > 3000:  
+        if self.frozen and pygame.time.get_ticks() - self.frozen_count > 2000:  
             self.frozen = False
-            self.frozen_count = 0 
-            todos_sprites.add(freeze) 
+            self.frozen_count = 0
+
+        if player1.pontuacao_anterior < player1.pontuacao:
+            freeze.rect.x = random.randint(180 + 20, WIDTH - 200)
+            freeze.rect.y = random.randint(180 + 70, HEIGHT - 20)
+            if freeze not in todos_sprites:
+                todos_sprites.add(freeze)
+
+        if player2.pontuacao_anterior < player2.pontuacao:
+            freeze.rect.x = random.randint(180 + 20, WIDTH - 200)
+            freeze.rect.y = random.randint(180 + 70, HEIGHT - 20)
+            if freeze not in todos_sprites:
+                todos_sprites.add(freeze)
 
         if size in todos_sprites and self.rect.colliderect(size.rect):
             player1.rect.top = 50
@@ -223,12 +259,24 @@ class Player2 (pygame.sprite.Sprite):
             player1.size_count = pygame.time.get_ticks()
             todos_sprites.remove(size)
 
-        if self.sized == True and pygame.time.get_ticks() - self.size_count > 3000: 
+        if self.sized == True and pygame.time.get_ticks() - self.size_count > 2000: 
             player1.rect.top = HEIGHT - 30
             player1.rect.centerx = (WIDTH / 4) * 3
             self.sized = False
-            self.size_count = 0 
-            todos_sprites.add (size)
+        
+        if player1.pontuacao_anterior < player1.pontuacao:
+            size.rect.x = random.randint(180 + 20, WIDTH - 200)
+            size.rect.y = random.randint(180 + 70, HEIGHT - 20)
+            if size not in todos_sprites:
+                todos_sprites.add(size)
+            player1.pontuacao_anterior = player1.pontuacao
+
+        if player2.pontuacao_anterior < player2.pontuacao:
+            size.rect.x = random.randint(180 + 20, WIDTH - 200)
+            size.rect.y = random.randint(180 + 70, HEIGHT - 20)
+            if size not in todos_sprites:
+                todos_sprites.add(size)
+            player2.pontuacao_anterior = player2.pontuacao
 
     def reset_position(self):
         #Reseta a bola e recomeca velocidades
@@ -237,7 +285,6 @@ class Player2 (pygame.sprite.Sprite):
         player1.rect.centerx = (WIDTH / 4) * 3
         player1.rect.bottom = HEIGHT - 10
     
-
 # ----- Função do movimento da Bola
 class Bola (pygame.sprite.Sprite):
     def __init__(self, img):
@@ -329,7 +376,7 @@ class Gol (pygame.sprite.Sprite):
         self.rect.centerx = 40
         self.rect.bottom = HEIGHT
 
-        self.travessao_rect = pygame.Rect(self.rect.x, self.rect.y, self.rect.width, 9) #travessão (rect)
+        self.travessao_rect = pygame.Rect(self.rect.x, self.rect.y, self.rect.width, 10) #travessão (rect)
 
 class Gol2 (pygame.sprite.Sprite):
     def __init__(self, img):
@@ -341,7 +388,7 @@ class Gol2 (pygame.sprite.Sprite):
         self.rect.centerx = WIDTH - 40
         self.rect.bottom = HEIGHT
 
-        self.travessao_rect = pygame.Rect(self.rect.x, self.rect.y, self.rect.width, 9) #travessão (rect)
+        self.travessao_rect = pygame.Rect(self.rect.x, self.rect.y, self.rect.width, 10) #travessão (rect)
 
 class Freeze (pygame.sprite.Sprite):
     def __init__(self, img):
