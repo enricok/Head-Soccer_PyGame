@@ -511,9 +511,15 @@ while game:
         pygame.draw.rect(window, (0, 0, 0), (rect_x1, rect_y1, rect_width, rect_height))
         pygame.draw.rect(window, (0, 0, 0), (rect_x2, rect_y2, rect_width, rect_height))
 
-        player1_gol_fonte = gol_fonte.render(f"{player1.pontuacao}", True, (255, 0, 0))
-        player2_gol_fonte = gol_fonte.render(f"{player2.pontuacao}", True, (255, 0, 0))
-    
+        if player1.pontuacao < 10:
+            player1_gol_fonte = gol_fonte.render(f"0{player1.pontuacao}", True, (255, 0, 0))
+        else:
+            player1_gol_fonte = gol_fonte.render(f"{player1.pontuacao}", True, (255, 0, 0))
+
+        if player2.pontuacao < 10:
+            player2_gol_fonte = gol_fonte.render(f"0{player2.pontuacao}", True, (255, 0, 0))
+        else:
+            player2_gol_fonte = gol_fonte.render(f"{player2.pontuacao}", True, (255, 0, 0))
         # Mostrar a pontuação
         window.blit(player1_gol_fonte, (WIDTH - 170, 25))
         window.blit(player2_gol_fonte, (120, 25)) 
