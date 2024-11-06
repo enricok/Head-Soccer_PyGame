@@ -52,7 +52,7 @@ informacao2 = pygame.image.load('assets/img/info2.png').convert()
 informacao2 = pygame.transform.scale(informacao2, (700, 400))
 
 #Freeze 
-freeze = pygame.image.load('assets/images/pickupBad.png').convert_alpha()
+freeze = pygame.image.load('assets/img/pickupFreeze.png').convert_alpha()
 freeze = pygame.transform.scale(freeze, (30, 30))
 
 #Size
