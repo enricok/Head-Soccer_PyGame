@@ -145,6 +145,13 @@ class Player1 (pygame.sprite.Sprite):
             self.size_count = 0
             todos_sprites.add(size) 
 
+    def reset_position(self):
+        #Reseta a bola e recomeca velocidades
+        self.rect.centerx = (WIDTH / 4) * 3
+        self.rect.bottom = HEIGHT - 10
+        player2.rect.centerx = WIDTH / 4
+        player2.rect.bottom = HEIGHT - 10
+
     # ----- Função do movimento do jogador 02
 class Player2 (pygame.sprite.Sprite):
     def __init__(self, img):
@@ -223,6 +230,14 @@ class Player2 (pygame.sprite.Sprite):
             self.size_count = 0 
             todos_sprites.add (size)
 
+    def reset_position(self):
+        #Reseta a bola e recomeca velocidades
+        self.rect.centerx = WIDTH / 4
+        self.rect.bottom = HEIGHT - 10
+        player1.rect.centerx = (WIDTH / 4) * 3
+        player1.rect.bottom = HEIGHT - 10
+    
+
 # ----- Função do movimento da Bola
 class Bola (pygame.sprite.Sprite):
     def __init__(self, img):
@@ -286,11 +301,13 @@ class Bola (pygame.sprite.Sprite):
         # Verifica se é gol e conta os pontos 
         if (self.rect.right < gol1.rect.right and self.rect.top > gol1.rect.top and not self.atravessou and not self.rect.colliderect(gol1.travessao_rect)):
             player1.pontuacao += 1
+            player1.reset_position()
             self.atravessou = True  # Gol valeu
             self.reset_position()
 
         elif (self.rect.left > gol2.rect.left and self.rect.top > gol2.rect.top and not self.atravessou and not self.rect.colliderect(gol2.travessao_rect)):
             player2.pontuacao += 1
+            player2.reset_position()
             self.atravessou = True  # Gol valeu
             self.reset_position()
         
