@@ -62,7 +62,11 @@ size = pygame.transform.scale(size, (30, 30))
 
 #Status Frozen
 status_frozen = pygame.image.load('assets/images/statusFrozen.png').convert_alpha()
-status_frozen = pygame.transform.scale(status_frozen, (30, 30))
+status_frozen = pygame.transform.scale(status_frozen, (55, 55))
+
+#Status Sized
+status_sized = pygame.image.load('assets/images/pickupJump.png').convert_alpha()
+status_sized = pygame.transform.scale(status_sized, (20, 20))
 
 # Clock (determina FPS)
 clock = pygame.time.Clock()
@@ -134,43 +138,23 @@ class Player1 (pygame.sprite.Sprite):
         if freeze in todos_sprites and self.rect.colliderect(freeze.rect):
             player2.frozen = True
             player2.frozen_count = pygame.time.get_ticks()
-            # self.frozen_count_symbol = pygame.time.get_ticks () #count de quando o frozen aparece denovo
             todos_sprites.remove(freeze)
 
-        if self.frozen and pygame.time.get_ticks() - self.frozen_count > 2000:  
+        if self.frozen and pygame.time.get_ticks() - self.frozen_count > 3500:  
             self.frozen = False
             self.frozen_count = 0
-        
-        # frozen_duration_symbol = 10000 + random.randint (0, 2000)
-
-        # if pygame.time.get_ticks() - self.frozen_count_symbol > frozen_duration_symbol:
-        #     freeze.rect.x = random.randint(180 + 20, WIDTH - 200)
-        #     freeze.rect.y = random.randint(180 + 70, HEIGHT - 20)
-        #     if freeze not in todos_sprites:
-        #         todos_sprites.add(freeze)
 
         if size in todos_sprites and self.rect.colliderect(size.rect):
             player2.rect.top = 50
             player2.rect.centerx = WIDTH/2
             player2.sized = True
             player2.size_count = pygame.time.get_ticks()
-            # self.sized_count_symbol = pygame.time.get_ticks() #count de quando o sized aparece denovo
             todos_sprites.remove(size)
 
-        # sized_duration_symbol = 3000 + random.randint (0, 2000)
-
-        if self.sized == True and pygame.time.get_ticks() - self.size_count > 2000:
+        if self.sized == True and pygame.time.get_ticks() - self.size_count > 3500:
             player2.rect.top = HEIGHT - 30
             player2.rect.centerx = (WIDTH / 4) * 3
             self.sized = False
-            
-        # if pygame.time.get_ticks() - self.sized_count_symbol > sized_duration_symbol:
-        #     size.rect.x = random.randint(180 + 20, WIDTH - 200)
-        #     size.rect.y = random.randint(180 + 70, HEIGHT - 20)
-        #     self.sized_count_symbol = pygame.time.get_ticks()
-        #     print(self.sized_count_symbol)
-        #     if size not in todos_sprites:
-        #         todos_sprites.add(size)
 
     def reset_position(self):
         #Reseta a bola e recomeca velocidades
@@ -235,9 +219,6 @@ class Player2 (pygame.sprite.Sprite):
                 self.ta_no_chao = True 
                 self.jumping = False
 
-        # self.frozen_count_symbol = 0
-        # self.sized_count_symbol = 0
-
         # Freeze acontece na colisão
         if freeze in todos_sprites and self.rect.colliderect(freeze.rect):
             player1.frozen = True
@@ -276,7 +257,6 @@ class Player2 (pygame.sprite.Sprite):
         if pygame.time.get_ticks() - self.sized_count_symbol > sized_duration_symbol:
             size.rect.x = random.randint(180 + 20, WIDTH - 200)
             size.rect.y = random.randint(180 + 70, HEIGHT - 20)
-            print(self.sized_count_symbol, pygame.time.get_ticks() - self.sized_count_symbol, sized_duration_symbol)
             self.sized_count_symbol = pygame.time.get_ticks()
             if size not in todos_sprites:
                 todos_sprites.add(size)
@@ -440,13 +420,45 @@ class StatusFrozen (pygame.sprite.Sprite):
         self.image = img
         self.rect = self.image.get_rect()
 
+    def update (self):
+
         if player1.frozen == True:
             self.rect.x = player1.rect.x
             self.rect.y = player1.rect.y
+            self.rect.centerx = player1.rect.centerx
 
-        if player2.frozen == True:
+        elif player2.frozen == True:
             self.rect.x = player2.rect.x
             self.rect.y = player2.rect.y
+            self.rect.centerx = player2.rect.centerx
+
+        elif player1.frozen == False and player2.frozen == False:
+            self.rect.x = 100000
+            self.rect.y = 100000
+            self.rect.centerx = 1000000
+
+class StatusSized (pygame.sprite.Sprite):
+    def __init__(self, img):
+
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = img
+        self.rect = self.image.get_rect()
+
+    def update (self):
+
+        if player1.sized == True:
+            self.rect.top = player1.rect.bottom
+            self.rect.centerx = player1.rect.centerx
+
+        elif player2.sized == True:
+            self.rect.top = player2.rect.bottom
+            self.rect.centerx = player2.rect.centerx
+
+        elif player1.sized == False and player2.sized == False:
+            self.rect.x = 100000
+            self.rect.y = 100000
+            self.rect.centerx = 1000000
 
 # ----- Criar o jogador 01 e jogador 02 + add ele em um grupo como do tutorial
 player1 = Player1(personagem1)
@@ -457,6 +469,7 @@ gol2 = Gol2 (gol2)
 freeze = Freeze (freeze)
 size = Size (size)
 status_frozen = StatusFrozen (status_frozen)
+status_sized = StatusSized (status_sized)
 todos_sprites = pygame.sprite.Group()
 todos_sprites.add(player1)
 todos_sprites.add(player2)
@@ -466,6 +479,7 @@ todos_sprites.add (gol2)
 todos_sprites.add (freeze)
 todos_sprites.add (size)
 todos_sprites.add (status_frozen)
+todos_sprites.add (status_sized)
 
 # ----- Inicia estruturas de dados
 game = True
@@ -635,6 +649,7 @@ while game:
         freeze.update ()
         size.update()
         status_frozen.update()
+        status_sized.update ()
 
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
