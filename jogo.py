@@ -4,6 +4,7 @@ import pygame
 import random
 
 pygame.init()
+pygame.mixer.init()
 
 # ----- Gera tela principal
 WIDTH = 700
@@ -65,6 +66,10 @@ status_frozen = pygame.transform.scale(status_frozen, (30, 30))
 
 # Clock (determina FPS)
 clock = pygame.time.Clock()
+
+# Música da tela de início 
+pygame.mixer.music.load('assets/snd/musica.ogg')
+pygame.mixer.music.set_volume(0.4)
 
 # ----- Gera mensagem
 gol_fonte = pygame.font.Font ('assets/font/fonte2.ttf', 60)
@@ -476,6 +481,7 @@ mostrar = True
 nova_time = 0
 
 # ===== Loop principal =====
+pygame.mixer.music.play(loops=-1)
 while game:
 
     clock.tick(60)
