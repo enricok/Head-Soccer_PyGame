@@ -80,6 +80,14 @@ status_sized = pygame.transform.scale(status_sized, (20, 20))
 select = pygame.image.load('assets/img/select.png').convert()
 select = pygame.transform.scale(select, (700, 400))
 
+#Select Stadium
+stadium = pygame.image.load('assets/img/2.png').convert()
+stadium = pygame.transform.scale(stadium, (700, 400))
+
+#Stadium 02
+gamescreen2 = pygame.image.load('assets/img/stadium02.png').convert()
+gamescreen2 = pygame.transform.scale(gamescreen2, (800, 400))
+
 # Clock (determina FPS)
 clock = pygame.time.Clock()
 
@@ -501,6 +509,8 @@ mostrar = True
 nova_time = 0
 player1_selected = False
 player2_selected = False
+gamescreen_selected = False
+gamescreen2_selected = False
 
 # ===== Loop principal =====
 pygame.mixer.music.play(loops=-1)
@@ -524,6 +534,12 @@ while game:
                 if screen == 1:
                     screen = "info_screen"
                     info_screen_start_time = pygame.time.get_ticks()  # Marca o tempo atual
+
+            if screen == "stadium":
+                if event.key == pygame.K_u:
+                    gamescreen2_selected = True
+                if event.key == pygame.K_p:
+                    gamescreen_selected = True
 
             if screen == "select":
                 if event.key == pygame.K_n and player1_selected == False:
@@ -648,12 +664,23 @@ while game:
         window.fill ((0,0,0))
         window.blit(select, (0, 0))
         if player1_selected == True and player2_selected == True:
+            screen = "stadium"
+
+    if screen == "stadium":
+        window.fill ((0,0,0))
+        window.blit (stadium, (0,0))
+        if gamescreen_selected == True or gamescreen2_selected == True:
             screen = 2
 
     elif screen == 2:
         # Informação sobre screen 2
-        window.fill((188,143,143))
-        window.blit(gamescreen, (-50, 0))
+        if gamescreen_selected == True and gamescreen2_selected == False:
+            window.fill((188,143,143))
+            window.blit(gamescreen, (-50, 0))
+        if gamescreen2_selected == True and gamescreen_selected == False:
+            window.fill((188,143,143))
+            window.blit(gamescreen2, (-50, 0))
+
         todos_sprites.draw(window)
 
         #Pontuação
