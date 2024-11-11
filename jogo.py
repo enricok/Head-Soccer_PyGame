@@ -134,49 +134,43 @@ class Player1 (pygame.sprite.Sprite):
         if freeze in todos_sprites and self.rect.colliderect(freeze.rect):
             player2.frozen = True
             player2.frozen_count = pygame.time.get_ticks()
+            # self.frozen_count_symbol = pygame.time.get_ticks () #count de quando o frozen aparece denovo
             todos_sprites.remove(freeze)
 
         if self.frozen and pygame.time.get_ticks() - self.frozen_count > 2000:  
             self.frozen = False
             self.frozen_count = 0
         
-        if player1.pontuacao_anterior < player1.pontuacao:
-            freeze.rect.x = random.randint(180 + 20, WIDTH - 200)
-            freeze.rect.y = random.randint(180 + 70, HEIGHT - 20)
-            if freeze not in todos_sprites:
-                todos_sprites.add(freeze)
+        # frozen_duration_symbol = 10000 + random.randint (0, 2000)
 
-        if player2.pontuacao_anterior < player2.pontuacao:
-            freeze.rect.x = random.randint(180 + 20, WIDTH - 200)
-            freeze.rect.y = random.randint(180 + 70, HEIGHT - 20)
-            if freeze not in todos_sprites:
-                todos_sprites.add(freeze)
+        # if pygame.time.get_ticks() - self.frozen_count_symbol > frozen_duration_symbol:
+        #     freeze.rect.x = random.randint(180 + 20, WIDTH - 200)
+        #     freeze.rect.y = random.randint(180 + 70, HEIGHT - 20)
+        #     if freeze not in todos_sprites:
+        #         todos_sprites.add(freeze)
 
         if size in todos_sprites and self.rect.colliderect(size.rect):
             player2.rect.top = 50
             player2.rect.centerx = WIDTH/2
             player2.sized = True
             player2.size_count = pygame.time.get_ticks()
+            # self.sized_count_symbol = pygame.time.get_ticks() #count de quando o sized aparece denovo
             todos_sprites.remove(size)
+
+        # sized_duration_symbol = 3000 + random.randint (0, 2000)
 
         if self.sized == True and pygame.time.get_ticks() - self.size_count > 2000:
             player2.rect.top = HEIGHT - 30
             player2.rect.centerx = (WIDTH / 4) * 3
             self.sized = False
             
-        if player1.pontuacao_anterior < player1.pontuacao:
-            size.rect.x = random.randint(180 + 20, WIDTH - 200)
-            size.rect.y = random.randint(180 + 70, HEIGHT - 20)
-            if size not in todos_sprites:
-                todos_sprites.add(size)
-            player1.pontuacao_anterior = player1.pontuacao
-
-        if player2.pontuacao_anterior < player2.pontuacao:
-            size.rect.x = random.randint(180 + 20, WIDTH - 200)
-            size.rect.y = random.randint(180 + 70, HEIGHT - 20)
-            if size not in todos_sprites:
-                todos_sprites.add(size)
-            player2.pontuacao_anterior = player2.pontuacao
+        # if pygame.time.get_ticks() - self.sized_count_symbol > sized_duration_symbol:
+        #     size.rect.x = random.randint(180 + 20, WIDTH - 200)
+        #     size.rect.y = random.randint(180 + 70, HEIGHT - 20)
+        #     self.sized_count_symbol = pygame.time.get_ticks()
+        #     print(self.sized_count_symbol)
+        #     if size not in todos_sprites:
+        #         todos_sprites.add(size)
 
     def reset_position(self):
         #Reseta a bola e recomeca velocidades
@@ -212,6 +206,8 @@ class Player2 (pygame.sprite.Sprite):
 
         self.sized = False
         self.size_count = 0
+        self.sized_count_symbol = 0
+        self.frozen_count_symbol = 0
 
     def update (self):
 
@@ -239,25 +235,26 @@ class Player2 (pygame.sprite.Sprite):
                 self.ta_no_chao = True 
                 self.jumping = False
 
+        # self.frozen_count_symbol = 0
+        # self.sized_count_symbol = 0
+
         # Freeze acontece na colisão
         if freeze in todos_sprites and self.rect.colliderect(freeze.rect):
             player1.frozen = True
             player1.frozen_count = pygame.time.get_ticks() #usar o clock do python
+            self.frozen_count_symbol = pygame.time.get_ticks() #count de quando o frozen aparece denovo
             todos_sprites.remove(freeze) 
 
-        if self.frozen and pygame.time.get_ticks() - self.frozen_count > 2000:  
+        frozen_duration_symbol = 30000 + random.randint (0, 2000)
+
+        if self.frozen and pygame.time.get_ticks() - self.frozen_count > 3500:  
             self.frozen = False
             self.frozen_count = 0
 
-        if player1.pontuacao_anterior < player1.pontuacao:
+        if pygame.time.get_ticks() - self.frozen_count_symbol > frozen_duration_symbol:
             freeze.rect.x = random.randint(180 + 20, WIDTH - 200)
             freeze.rect.y = random.randint(180 + 70, HEIGHT - 20)
-            if freeze not in todos_sprites:
-                todos_sprites.add(freeze)
-
-        if player2.pontuacao_anterior < player2.pontuacao:
-            freeze.rect.x = random.randint(180 + 20, WIDTH - 200)
-            freeze.rect.y = random.randint(180 + 70, HEIGHT - 20)
+            self.frozen_count_symbol = pygame.time.get_ticks()
             if freeze not in todos_sprites:
                 todos_sprites.add(freeze)
 
@@ -266,27 +263,24 @@ class Player2 (pygame.sprite.Sprite):
             player1.rect.centerx = WIDTH/2
             player1.sized = True
             player1.size_count = pygame.time.get_ticks()
+            self.sized_count_symbol = pygame.time.get_ticks() #count de quando o sized aparece denovo
             todos_sprites.remove(size)
 
-        if self.sized == True and pygame.time.get_ticks() - self.size_count > 2000: 
+        sized_duration_symbol = 30000 + random.randint (0, 2000)
+
+        if self.sized == True and pygame.time.get_ticks() - self.size_count > 3500: 
             player1.rect.top = HEIGHT - 30
             player1.rect.centerx = (WIDTH / 4) * 3
             self.sized = False
         
-        if player1.pontuacao_anterior < player1.pontuacao:
+        if pygame.time.get_ticks() - self.sized_count_symbol > sized_duration_symbol:
             size.rect.x = random.randint(180 + 20, WIDTH - 200)
             size.rect.y = random.randint(180 + 70, HEIGHT - 20)
+            print(self.sized_count_symbol, pygame.time.get_ticks() - self.sized_count_symbol, sized_duration_symbol)
+            self.sized_count_symbol = pygame.time.get_ticks()
             if size not in todos_sprites:
                 todos_sprites.add(size)
-            player1.pontuacao_anterior = player1.pontuacao
-
-        if player2.pontuacao_anterior < player2.pontuacao:
-            size.rect.x = random.randint(180 + 20, WIDTH - 200)
-            size.rect.y = random.randint(180 + 70, HEIGHT - 20)
-            if size not in todos_sprites:
-                todos_sprites.add(size)
-            player2.pontuacao_anterior = player2.pontuacao
-
+    
     def reset_position(self):
         #Reseta a bola e recomeca velocidades
         self.rect.centerx = WIDTH / 4
@@ -629,6 +623,7 @@ while game:
             player2_gol_fonte = gol_fonte.render(f"0{player2.pontuacao}", True, (255, 0, 0))
         else:
             player2_gol_fonte = gol_fonte.render(f"{player2.pontuacao}", True, (255, 0, 0))
+
         # Mostrar a pontuação
         window.blit(player1_gol_fonte, (WIDTH - 170, 25))
         window.blit(player2_gol_fonte, (120, 25)) 
