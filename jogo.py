@@ -32,6 +32,14 @@ personagem1 = pygame.transform.scale(personagem1, (50, 50))
 personagem2 = pygame.image.load('assets/img/player02.png').convert_alpha()
 personagem2 = pygame.transform.scale(personagem2, (50, 50))
 
+# Personagem 3 (Olha para a esquerda)
+personagem3 = pygame.image.load('assets/img/Character51.png').convert_alpha()
+personagem3 = pygame.transform.scale(personagem3, (50, 50))
+
+# Personagem 4 (Olha para a direita)
+personagem4 = pygame.image.load('assets/img/Character91.png').convert_alpha()
+personagem4 = pygame.transform.scale(personagem4, (50, 50))
+
 # Gol 1
 gol1 = pygame.image.load('assets/img/goalNormal.png').convert_alpha()
 gol1 = pygame.transform.scale(gol1, (80, 180))
@@ -67,6 +75,10 @@ status_frozen = pygame.transform.scale(status_frozen, (55, 55))
 #Status Sized
 status_sized = pygame.image.load('assets/images/pickupJump.png').convert_alpha()
 status_sized = pygame.transform.scale(status_sized, (20, 20))
+
+#Select Character
+select = pygame.image.load('assets/img/select.png').convert()
+select = pygame.transform.scale(select, (700, 400))
 
 # Clock (determina FPS)
 clock = pygame.time.Clock()
@@ -473,8 +485,6 @@ size = Size (size)
 status_frozen = StatusFrozen (status_frozen)
 status_sized = StatusSized (status_sized)
 todos_sprites = pygame.sprite.Group()
-todos_sprites.add(player1)
-todos_sprites.add(player2)
 todos_sprites.add(bola)
 todos_sprites.add (gol1)
 todos_sprites.add (gol2)
@@ -489,6 +499,8 @@ screen = 1
 piscar_texto = 0
 mostrar = True
 nova_time = 0
+player1_selected = False
+player2_selected = False
 
 # ===== Loop principal =====
 pygame.mixer.music.play(loops=-1)
@@ -512,6 +524,25 @@ while game:
                 if screen == 1:
                     screen = "info_screen"
                     info_screen_start_time = pygame.time.get_ticks()  # Marca o tempo atual
+
+            if screen == "select":
+                if event.key == pygame.K_n and player1_selected == False:
+                    player1_selected = True
+                    player1 = Player1(personagem1)
+                    todos_sprites.add(player1)
+                elif event.key == pygame.K_m and player1_selected == False:
+                    player1_selected = True
+                    player1 = Player1(personagem3)
+                    todos_sprites.add(player1)
+
+                if event.key == pygame.K_r and player2_selected == False:
+                    player2_selected = True
+                    player2 = Player2(personagem2)
+                    todos_sprites.add(player2)
+                elif event.key == pygame.K_f and player2_selected == False:
+                    player2_selected = True
+                    player2 = Player2(personagem4)
+                    todos_sprites.add(player2)
 
             # Personagem 01 Movimento
             # Mexe o personagem 01 para esquerda e direita, adicionando uma velocidade 
@@ -598,7 +629,7 @@ while game:
         if mostrar:
             window.blit (start, (256, 231))
 
-    elif screen == "info_screen":
+    if screen == "info_screen":
         # Tela de informação
         window.fill((0, 0, 0))  # Cor de fundo para a tela de informação
         window.blit(informacao, (0, 0))
@@ -607,12 +638,18 @@ while game:
         if (current_time - info_screen_start_time > info1_screen_duration):
             screen = "info2_screen" # Vai para a tela2 de informação após o tempo definido
 
-    elif screen == "info2_screen":
+    if screen == "info2_screen":
         window.fill((0, 0, 0))  
         window.blit(informacao2, (0, 0))
         if nova_time - 0 > info2_screen_duration:
+            screen = "select"
+
+    if screen == "select":
+        window.fill ((0,0,0))
+        window.blit(select, (0, 0))
+        if player1_selected == True and player2_selected == True:
             screen = 2
-            
+
     elif screen == 2:
         # Informação sobre screen 2
         window.fill((188,143,143))
