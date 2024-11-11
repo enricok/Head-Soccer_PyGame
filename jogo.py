@@ -688,9 +688,6 @@ while game:
         rect_x2, rect_y2 = 95, 10   # Rectangle position
         rect_width, rect_height = 115, 90  # Rectangle size, smaller than the screen
 
-        #pygame.draw.rect (window, (0, 0, 0), (0,230,80,170))
-        #pygame.draw.rect (window, (0, 0, 0), (620,230,80,170))
-
         pygame.draw.rect(window, (0, 0, 0), (rect_x1, rect_y1, rect_width, rect_height))
         pygame.draw.rect(window, (0, 0, 0), (rect_x2, rect_y2, rect_width, rect_height))
 
