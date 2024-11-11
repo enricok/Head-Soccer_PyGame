@@ -308,12 +308,14 @@ class Bola (pygame.sprite.Sprite):
         
         #Colisões com jogadores
         if player1.rect.colliderect(self.rect):
+            self.speedx = - abs(self.speedx)
             self.speedy += player1.speedy * self.restituicao
             self.speedx += player1.speedx * self.restituicao
 
         if player2.rect.colliderect(self.rect):
+            self.speedx = abs(self.speedx)
             self.speedy += player2.speedy * self.restituicao
-            self.speedx += player2.speedx * self.restituicao 
+            self.speedx += player2.speedx * self.restituicao
 
         #Colisões com bordas
         if self.rect.right >= WIDTH:
