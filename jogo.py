@@ -444,20 +444,21 @@ class StatusFrozen (pygame.sprite.Sprite):
 
     def update (self):
 
-        if player1.frozen == True:
+        if player1.frozen == True and player2.frozen == False:
             self.rect.x = player1.rect.x
             self.rect.y = player1.rect.y
             self.rect.centerx = player1.rect.centerx
 
-        elif player2.frozen == True:
+        elif player2.frozen == True and player1.frozen == False:
             self.rect.x = player2.rect.x
             self.rect.y = player2.rect.y
             self.rect.centerx = player2.rect.centerx
 
+
         elif player1.frozen == False and player2.frozen == False:
-            self.rect.x = 100000
-            self.rect.y = 100000
-            self.rect.centerx = 1000000
+            self.rect.x = 100000000
+            self.rect.y = 100000000
+            self.rect.centerx = 100000000
 
 class StatusSized (pygame.sprite.Sprite):
     def __init__(self, img):
