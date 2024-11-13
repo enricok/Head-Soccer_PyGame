@@ -91,6 +91,16 @@ gamescreen2 = pygame.transform.scale(gamescreen2, (800, 400))
 # Clock (determina FPS)
 clock = pygame.time.Clock()
 
+# X
+
+x = pygame.image.load('assets/img/X.png').convert_alpha()
+x = pygame.transform.scale(x, (180, 180))
+
+# X_2
+
+x2 = pygame.image.load('assets/img/X.png').convert_alpha()
+x2 = pygame.transform.scale(x2, (180, 180))
+
 # Música da tela de início 
 pygame.mixer.music.load('assets/snd/musica.ogg')
 pygame.mixer.music.set_volume(0.4)
@@ -102,9 +112,10 @@ start = font.render('press "SPACE" to play', True, (255, 255, 255))
 
 # Qual é o placar vencedor
 PLACAR_VENCEDOR = 1
+
 # Estádio é a imagem de fundo
 stadium_tf = pygame.image.load('assets/img/stadium02.png').convert()
-stadium_tf = pygame.transform.scale(stadium_tf, (700, 400))
+stadium_tf = pygame.transform.scale(stadium_tf, (800, 400))
 
 # ----- Função do movimento do jogador 01
 class Player1 (pygame.sprite.Sprite):
@@ -172,7 +183,7 @@ class Player1 (pygame.sprite.Sprite):
 
         if size in todos_sprites and self.rect.colliderect(size.rect):
             player2.rect.top = 50
-            player2.rect.centerx = WIDTH/2
+            #player2.rect.centerx = WIDTH/2
             player2.sized = True
             player2.size_count = pygame.time.get_ticks()
             todos_sprites.remove(size)
@@ -267,7 +278,7 @@ class Player2 (pygame.sprite.Sprite):
 
         if size in todos_sprites and self.rect.colliderect(size.rect):
             player1.rect.top = 50
-            player1.rect.centerx = WIDTH/2
+            #player1.rect.centerx = WIDTH/2
             player1.sized = True
             player1.size_count = pygame.time.get_ticks()
             self.sized_count_symbol = pygame.time.get_ticks() #count de quando o sized aparece denovo
@@ -449,7 +460,6 @@ class StatusFrozen (pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def update (self):
-
         if player1.frozen == True and player2.frozen == False:
             self.rect.x = player1.rect.x
             self.rect.y = player1.rect.y
@@ -459,7 +469,6 @@ class StatusFrozen (pygame.sprite.Sprite):
             self.rect.x = player2.rect.x
             self.rect.y = player2.rect.y
             self.rect.centerx = player2.rect.centerx
-
 
         elif player1.frozen == False and player2.frozen == False:
             self.rect.x = 100000000
@@ -505,13 +514,12 @@ todos_sprites.add (gol1)
 todos_sprites.add (gol2)
 todos_sprites.add (freeze)
 todos_sprites.add (size)
-todos_sprites.add (status_frozen)
 todos_sprites.add (status_sized)
 
 #Tela final do jogo
 def tela_final(jogador_vencedor):
     # Estádio com mensagem
-    window.blit(stadium_tf, (0, 0))
+    window.blit(stadium_tf, (-50, 0))
     font = pygame.font.Font(None, 74)
     win_text = f'Jogador {jogador_vencedor} venceu!'
     text = font.render(win_text, True, (255, 255, 255))
@@ -528,6 +536,14 @@ player1_selected = False
 player2_selected = False
 gamescreen_selected = False
 gamescreen2_selected = False
+
+m = False
+n = False
+r = False
+f = False
+
+u = False
+p = False
 
 # ===== Loop principal =====
 pygame.mixer.music.play(loops=-1)
@@ -555,27 +571,42 @@ while game:
             if screen == "stadium":
                 if event.key == pygame.K_u:
                     gamescreen2_selected = True
+
+                    u = True
+
                 if event.key == pygame.K_p:
                     gamescreen_selected = True
+
+                    p = True
 
             if screen == "select":
                 if event.key == pygame.K_n and player1_selected == False:
                     player1_selected = True
                     player1 = Player1(personagem1)
                     todos_sprites.add(player1)
+
+                    n = True
+
                 elif event.key == pygame.K_m and player1_selected == False:
                     player1_selected = True
                     player1 = Player1(personagem3)
                     todos_sprites.add(player1)
 
+                    m = True
+
                 if event.key == pygame.K_r and player2_selected == False:
                     player2_selected = True
                     player2 = Player2(personagem2)
                     todos_sprites.add(player2)
+
+                    r = True
+
                 elif event.key == pygame.K_f and player2_selected == False:
                     player2_selected = True
                     player2 = Player2(personagem4)
                     todos_sprites.add(player2)
+
+                    f = True
 
             # Personagem 01 Movimento
             # Mexe o personagem 01 para esquerda e direita, adicionando uma velocidade 
@@ -677,20 +708,49 @@ while game:
         if nova_time - 0 > info2_screen_duration:
             screen = "select"
 
+    x1_foi = False
+    x2_foi = False
+
     if screen == "select":
         window.fill ((0,0,0))
         window.blit(select, (0, 0))
+
+        if n == True:
+            window.blit (x, (130, 20))
+
+        if m == True:
+            window.blit (x, (130, HEIGHT - 180))
+
+        if r == True:
+            window.blit (x, (WIDTH - 280, 20))
+
+        if f == True:
+            window.blit (x, (WIDTH - 300, HEIGHT - 180))
+
         if player1_selected == True and player2_selected == True:
+            todos_sprites.add (status_frozen)
             screen = "stadium"
+            pygame.display.update()
 
     if screen == "stadium":
+        pygame.time.delay(500) #Tela por 0.5 sec
         window.fill ((0,0,0))
         window.blit (stadium, (0,0))
+
+        if u == True:
+            window.blit (x, (WIDTH/2 - 80, 30))
+ 
+        if p == True:
+            window.blit (x, (WIDTH/2 - 80, HEIGHT/2 + 50))
+
+        pygame.display.update ()
+
         if gamescreen_selected == True or gamescreen2_selected == True:
             screen = 2
 
     elif screen == 2:
         # Informação sobre screen 2
+        pygame.time.delay(500) #Tela por 0.5 sec
         if gamescreen_selected == True and gamescreen2_selected == False:
             window.fill((188,143,143))
             window.blit(gamescreen, (-50, 0))
@@ -735,11 +795,11 @@ while game:
     if player1.pontuacao >= PLACAR_VENCEDOR:
         tela_final(1)
         pygame.time.delay(3000) #Tela por 3 sec
-        game = False   # Finaliza o jogo
+        game = False # Finaliza o jogo
     elif player2.pontuacao >= PLACAR_VENCEDOR:
         tela_final(2)
         pygame.time.delay(3000) #Tela por 3 sec
-        game = False  # Finaliza o jogo
+        game = False # Finaliza o jogo
 
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
