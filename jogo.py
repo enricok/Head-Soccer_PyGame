@@ -746,11 +746,11 @@ while game:
         pygame.display.update ()
 
         if gamescreen_selected == True or gamescreen2_selected == True:
+            pygame.time.delay(500) #Tela por 0.5 sec
             screen = 2
 
     elif screen == 2:
         # Informação sobre screen 2
-        pygame.time.delay(500) #Tela por 0.5 sec
         if gamescreen_selected == True and gamescreen2_selected == False:
             window.fill((188,143,143))
             window.blit(gamescreen, (-50, 0))
