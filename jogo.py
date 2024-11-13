@@ -100,6 +100,12 @@ gol_fonte = pygame.font.Font ('assets/font/fonte2.ttf', 60)
 font = pygame.font.SysFont(None, 25)
 start = font.render('press "SPACE" to play', True, (255, 255, 255))
 
+# Qual é o placar vencedor
+PLACAR_VENCEDOR = 1
+# Estádio é a imagem de fundo
+stadium_tf = pygame.image.load('assets/img/stadium02.png').convert()
+stadium_tf = pygame.transform.scale(stadium_tf, (700, 400))
+
 # ----- Função do movimento do jogador 01
 class Player1 (pygame.sprite.Sprite):
     def __init__(self, img):
@@ -183,7 +189,7 @@ class Player1 (pygame.sprite.Sprite):
         player2.rect.centerx = WIDTH / 4
         player2.rect.bottom = HEIGHT - 10
 
-    # ----- Função do movimento do jogador 02
+# ----- Função do movimento do jogador 02
 class Player2 (pygame.sprite.Sprite):
     def __init__(self, img):
 
@@ -502,6 +508,16 @@ todos_sprites.add (size)
 todos_sprites.add (status_frozen)
 todos_sprites.add (status_sized)
 
+#Tela final do jogo
+def tela_final(jogador_vencedor):
+    # Estádio com mensagem
+    window.blit(stadium_tf, (0, 0))
+    font = pygame.font.Font(None, 74)
+    win_text = f'Jogador {jogador_vencedor} venceu!'
+    text = font.render(win_text, True, (255, 255, 255))
+    window.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
+    pygame.display.flip() #Atualiza tela toda
+
 # ----- Inicia estruturas de dados
 game = True
 screen = 1
@@ -714,6 +730,16 @@ while game:
         size.update()
         status_frozen.update()
         status_sized.update ()
+
+    # Vê se algum jogador alcançou o placar
+    if player1.pontuacao >= PLACAR_VENCEDOR:
+        tela_final(1)
+        pygame.time.delay(3000) #Tela por 3 sec
+        game = False   # Finaliza o jogo
+    elif player2.pontuacao >= PLACAR_VENCEDOR:
+        tela_final(2)
+        pygame.time.delay(3000) #Tela por 3 sec
+        game = False  # Finaliza o jogo
 
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
