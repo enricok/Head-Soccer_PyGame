@@ -196,7 +196,7 @@ class Player1 (pygame.sprite.Sprite):
 
         if self.sized == True and pygame.time.get_ticks() - self.size_count > 3500:
             player2.rect.top = HEIGHT - 30
-            player2.rect.centerx = (WIDTH / 4) * 3
+            # player2.rect.centerx = (WIDTH / 4) * 3
             self.sized = False
 
     def reset_position(self):
@@ -295,7 +295,7 @@ class Player2 (pygame.sprite.Sprite):
 
         if self.sized == True and pygame.time.get_ticks() - self.size_count > 3500: 
             player1.rect.top = HEIGHT - 30
-            player1.rect.centerx = (WIDTH / 4) * 3
+            # player1.rect.centerx = (WIDTH / 4) * 3
             self.sized = False
         
         if pygame.time.get_ticks() - self.sized_count_symbol > sized_duration_symbol:
