@@ -92,12 +92,10 @@ gamescreen2 = pygame.transform.scale(gamescreen2, (800, 400))
 clock = pygame.time.Clock()
 
 # X
-
 x = pygame.image.load('assets/img/X.png').convert_alpha()
 x = pygame.transform.scale(x, (180, 180))
 
 # X_2
-
 x2 = pygame.image.load('assets/img/X.png').convert_alpha()
 x2 = pygame.transform.scale(x2, (180, 180))
 
@@ -116,7 +114,7 @@ font = pygame.font.SysFont(None, 25)
 start = font.render('press "SPACE" to play', True, (255, 255, 255))
 
 # Qual é o placar vencedor
-PLACAR_VENCEDOR = 5
+PLACAR_VENCEDOR = 12
 
 # Estádio é a imagem de fundo
 stadium_tf = pygame.image.load('assets/img/stadium02.png').convert()
