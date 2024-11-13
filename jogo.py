@@ -102,8 +102,13 @@ x2 = pygame.image.load('assets/img/X.png').convert_alpha()
 x2 = pygame.transform.scale(x2, (180, 180))
 
 # Música da tela de início 
-pygame.mixer.music.load('assets/snd/musica.ogg')
-pygame.mixer.music.set_volume(0.4)
+pygame.mixer.music.load('assets/snd/nova.mp3')
+pygame.mixer.music.set_volume(0.2)
+
+# Efeitos sonoros
+som_freeze = pygame.mixer.Sound('assets/snd/ice-cracking-01.wav') #som congelado
+som_mola = pygame.mixer.Sound('assets/snd/mola.wav') #som mola 
+som_torcida = pygame.mixer.Sound('assets/snd/torcida.wav') #som torcida depois de gol
 
 # ----- Gera mensagem
 gol_fonte = pygame.font.Font ('assets/font/fonte2.ttf', 60)
@@ -111,7 +116,7 @@ font = pygame.font.SysFont(None, 25)
 start = font.render('press "SPACE" to play', True, (255, 255, 255))
 
 # Qual é o placar vencedor
-PLACAR_VENCEDOR = 1
+PLACAR_VENCEDOR = 5
 
 # Estádio é a imagem de fundo
 stadium_tf = pygame.image.load('assets/img/stadium02.png').convert()
@@ -174,6 +179,7 @@ class Player1 (pygame.sprite.Sprite):
         # Freeze acontece na colisão
         if freeze in todos_sprites and self.rect.colliderect(freeze.rect):
             player2.frozen = True
+            som_freeze.play()
             player2.frozen_count = pygame.time.get_ticks()
             todos_sprites.remove(freeze)
 
@@ -183,8 +189,8 @@ class Player1 (pygame.sprite.Sprite):
 
         if size in todos_sprites and self.rect.colliderect(size.rect):
             player2.rect.top = 50
-            #player2.rect.centerx = WIDTH/2
             player2.sized = True
+            som_mola.play()
             player2.size_count = pygame.time.get_ticks()
             todos_sprites.remove(size)
 
@@ -259,6 +265,7 @@ class Player2 (pygame.sprite.Sprite):
         # Freeze acontece na colisão
         if freeze in todos_sprites and self.rect.colliderect(freeze.rect):
             player1.frozen = True
+            som_freeze.play()
             player1.frozen_count = pygame.time.get_ticks() #usar o clock do python
             self.frozen_count_symbol = pygame.time.get_ticks() #count de quando o frozen aparece denovo
             todos_sprites.remove(freeze) 
@@ -278,8 +285,8 @@ class Player2 (pygame.sprite.Sprite):
 
         if size in todos_sprites and self.rect.colliderect(size.rect):
             player1.rect.top = 50
-            #player1.rect.centerx = WIDTH/2
             player1.sized = True
+            som_mola.play()
             player1.size_count = pygame.time.get_ticks()
             self.sized_count_symbol = pygame.time.get_ticks() #count de quando o sized aparece denovo
             todos_sprites.remove(size)
@@ -370,6 +377,7 @@ class Bola (pygame.sprite.Sprite):
         # Verifica se é gol e conta os pontos 
         if (self.rect.right < gol1.rect.right and self.rect.top > gol1.rect.top and not self.atravessou and not self.rect.colliderect(gol1.travessao_rect)):
             player1.pontuacao += 1
+            som_torcida.play()
             player1.reset_position()
             self.atravessou = True  # Gol valeu
             self.reset_position()
@@ -385,6 +393,7 @@ class Bola (pygame.sprite.Sprite):
 
         elif (self.rect.left > gol2.rect.left and self.rect.top > gol2.rect.top and not self.atravessou and not self.rect.colliderect(gol2.travessao_rect)):
             player2.pontuacao += 1
+            som_torcida.play()
             player2.reset_position()
             self.atravessou = True  # Gol valeu
             self.reset_position()
@@ -741,7 +750,7 @@ while game:
             window.blit (x, (WIDTH/2 - 80, 30))
  
         if p == True:
-            window.blit (x, (WIDTH/2 - 80, HEIGHT/2 + 50))
+            window.blit (x, (WIDTH/2 - 80, HEIGHT/2 + 30))
 
         pygame.display.update ()
 
