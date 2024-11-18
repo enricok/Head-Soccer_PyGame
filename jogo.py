@@ -422,7 +422,7 @@ class Gol (pygame.sprite.Sprite):
         self.rect.centerx = 40
         self.rect.bottom = HEIGHT
 
-        self.travessao_rect = pygame.Rect(self.rect.x, self.rect.y, self.rect.width, 9) #travessão (rect)
+        self.travessao_rect = pygame.Rect(self.rect.x, self.rect.y, self.rect.width, 8) #travessão (rect)
 
 class Gol2 (pygame.sprite.Sprite):
     def __init__(self, img):
@@ -434,7 +434,7 @@ class Gol2 (pygame.sprite.Sprite):
         self.rect.centerx = WIDTH - 40
         self.rect.bottom = HEIGHT
 
-        self.travessao_rect = pygame.Rect(self.rect.x, self.rect.y, self.rect.width, 9) #travessão (rect)
+        self.travessao_rect = pygame.Rect(self.rect.x, self.rect.y, self.rect.width, 8) #travessão (rect)
 
 class Freeze (pygame.sprite.Sprite):
     def __init__(self, img):
